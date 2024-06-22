@@ -16,11 +16,11 @@ public class QueryParser {
     }
 
 
-    public class Token {
-        enum Type { SELECT, INSERT, INTO, FROM, WHERE, IDENTIFIER, NUMBER, STRING, COMMA, EQUALS, LPAREN, RPAREN, SEMICOLON, UNKNOWN, ASTERIX, TABLE, DATABASE }
+    public static class Token {
+        enum Type { TABLE, DATABASE, SELECT, INSERT, DELETE, INTO, FROM, WHERE, IDENTIFIER, NUMBER, STRING, COMMA, EQUALS, LPAREN, RPAREN, SEMICOLON, ASTERIX, DOT, UNKNOWN }
 
-        Type type;
-        String value;
+        private final Type type;
+        private final String value;
 
         Token(Type type, String value) {
             this.type = type;
@@ -41,7 +41,7 @@ public class QueryParser {
         }
     }
 
-    public class Lexer {
+    private class Lexer {
         private final String input;
         private int position;
 
@@ -95,6 +95,10 @@ public class QueryParser {
                             tokens.add(new Token(Token.Type.SEMICOLON, String.valueOf(advance())));
                             break;
 
+                        case '.':
+                            tokens.add(new Token(Token.Type.DOT, String.valueOf(advance())));
+                            break;
+
                         case '\'':
                             tokens.add(string());
                         default:
@@ -131,6 +135,8 @@ public class QueryParser {
                     return new Token(Token.Type.TABLE, word);
                 case "database":
                     return new Token(Token.Type.DATABASE, word);
+                case "delete":
+                    return new Token(Token.Type.DELETE, word);
                 default:
                     return new Token(Token.Type.IDENTIFIER, word);
             }
@@ -139,6 +145,7 @@ public class QueryParser {
         private Token number() {
             StringBuilder sb = new StringBuilder();
             char current = peek();
+
             while (Character.isDigit(current)) {
                 sb.append(advance());
                 current = peek();
@@ -149,13 +156,17 @@ public class QueryParser {
 
         private Token string() {
             StringBuilder sb = new StringBuilder();
-            advance();
+            advance(); // Skip the opening quote
             char current = peek();
             while (current != '\'' && current != '\0') {
                 sb.append(advance());
                 current = peek();
             }
-            advance();
+            if (current == '\'') {
+                advance(); // Skip the closing quote
+            } else {
+                throw new IllegalArgumentException("Unclosed String Literal.");
+            }
             return new Token(Token.Type.STRING, sb.toString());
         }
     }
