@@ -15,8 +15,10 @@ public class Main {
                 System.out.print("manga> ");
                 query = input.nextLine();
                 parser = new QueryParser(query);
-                executor = new QueryExecutor(parser.parse());
-                executor.execute();
+                // executor = new QueryExecutor(parser.parse());
+                // executor.execute();
+
+                System.out.println(parser.parse());
             }
         }
     }

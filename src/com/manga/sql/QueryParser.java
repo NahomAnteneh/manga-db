@@ -17,7 +17,7 @@ public class QueryParser {
 
 
     public static class Token {
-        enum Type { TABLE, DATABASE, SELECT, INSERT, DELETE, INTO, FROM, WHERE, IDENTIFIER, NUMBER, STRING, INTEGER, VARCHAR, COMMA, EQUALS, LPAREN, RPAREN, SEMICOLON, ASTERIX, DOT, UNKNOWN }
+        enum Type { TABLE, DATABASE, SELECT, INSERT, DELETE, INTO, FROM, WHERE, VALUES, IDENTIFIER, NUMBER, STRING, INTEGER, VARCHAR, COMMA, EQUALS, LPAREN, RPAREN, SEMICOLON, ASTERIX, DOT, UNKNOWN }
 
         private final Type type;
         private final String value;
@@ -101,6 +101,8 @@ public class QueryParser {
 
                         case '\'':
                             tokens.add(string());
+                        case '\"':
+                            tokens.add(varchar());
                         default:
                             tokens.add(new Token(Token.Type.UNKNOWN, String.valueOf(advance())));
                             break;
@@ -137,6 +139,8 @@ public class QueryParser {
                     return new Token(Token.Type.DATABASE, word);
                 case "delete":
                     return new Token(Token.Type.DELETE, word);
+                case "values":
+                    return new Token(Token.Type.VALUES, word);
                 default:
                     return new Token(Token.Type.IDENTIFIER, word);
             }
@@ -168,6 +172,22 @@ public class QueryParser {
                 throw new IllegalArgumentException("Unclosed String Literal.");
             }
             return new Token(Token.Type.STRING, sb.toString());
+        }
+
+        private Token varchar() {
+            StringBuilder sb = new StringBuilder();
+            advance(); // Skip the opening quote
+            char current = peek();
+            while (current != '\"' && current != '\0') {
+                sb.append(advance());
+                current = peek();
+            }
+            if (current == '\"') {
+                advance(); // Skip the closing quote
+            } else {
+                throw new IllegalArgumentException("Unclosed String Literal.");
+            }
+            return new Token(Token.Type.VARCHAR, sb.toString());
         }
     }
 }

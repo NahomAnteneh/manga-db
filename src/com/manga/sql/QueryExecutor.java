@@ -19,16 +19,16 @@ public class QueryExecutor {
         Token firstToken = tokens.get(0);
         switch (firstToken.getType()) {
             case SELECT:
-                tokens.remove(0);
-                executeSelect(tokens);
+                // tokens.remove(0);
+                executeSelect();
                 break;
             case INSERT:
-                tokens.remove(0);
-                executeInsert(tokens);
+                // tokens.remove(0);
+                executeInsert();
                 break;
             case DELETE:
-                tokens.remove(0);
-                executeDelete(tokens);
+                // tokens.remove(0);
+                executeDelete();
                 break;
             default:
                 throw new IllegalArgumentException("Unsupported query type: " + firstToken.getValue());
@@ -36,7 +36,7 @@ public class QueryExecutor {
     }
 
     // This needs a connection to the database
-    private void executeSelect(List<Token> tokens) {
+    private void executeSelect() {
         for (Token token : tokens) {
             switch (token.getType()) {
                 case ASTERIX:
@@ -51,11 +51,11 @@ public class QueryExecutor {
         }
     }
 
-    private void executeInsert(List<Token> tokens) {
+    private void executeInsert() {
         
     }
 
-    private void executeDelete(List<Token> tokens) {
+    private void executeDelete() {
         
     }
 }
