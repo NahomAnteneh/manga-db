@@ -1,6 +1,7 @@
 package com.manga.database;
-import java.util.*;
 
+import java.util.ArrayList;
+import java.util.List;
 
 public class Database {
     
@@ -10,7 +11,7 @@ public class Database {
         List<List<String>> rows;
 
         public Node() {
-            this.keys = new ArrayList<>();
+            // this.table = new ArrayList<>();
             this.children = new ArrayList<>();
             this.rows = new ArrayList<>();
         }
@@ -87,21 +88,5 @@ public class Database {
                 child.children.subList(t, child.children.size()).clear();
             }
         }
-
-     
-      
-
-       
     }
-
-    public static void main(String[] args) {
-        BTree db = new BTree(3); // create a B-Tree with minimum degree 3
-
-        // Create some tables
-        db.createTable("users", Arrays.asList("id", "name", "email"));
-        db.createTable("products", Arrays.asList("id", "name", "price"));
-        db.createTable("orders", Arrays.asList("id", "user_id", "product_id"));
-
-      
-}
 }

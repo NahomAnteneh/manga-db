@@ -17,7 +17,7 @@ public class QueryParser {
 
 
     public static class Token {
-        enum Type { TABLE, DATABASE, SELECT, INSERT, DELETE, INTO, FROM, WHERE, IDENTIFIER, NUMBER, STRING, COMMA, EQUALS, LPAREN, RPAREN, SEMICOLON, ASTERIX, DOT, UNKNOWN }
+        enum Type { TABLE, DATABASE, SELECT, INSERT, DELETE, INTO, FROM, WHERE, IDENTIFIER, NUMBER, STRING, INTEGER, VARCHAR, COMMA, EQUALS, LPAREN, RPAREN, SEMICOLON, ASTERIX, DOT, UNKNOWN }
 
         private final Type type;
         private final String value;
